@@ -1,0 +1,32 @@
+alias(
+    name = "openssl",
+    actual = select({
+        "@bazel_tools//src/conditions:darwin_arm64": "@openssl_macos_arm64//:openssl",
+        "@bazel_tools//src/conditions:darwin_x86_64": "@openssl_macos_x86_64//:openssl",
+        "@bazel_tools//src/conditions:linux_aarch64": "@openssl_linux_aarch64//:libssl",
+        "@bazel_tools//src/conditions:linux_x86_64": "@openssl_linux_x86_64//:libssl",
+    }),
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "openssl_lib",
+    actual = select({
+        "@bazel_tools//src/conditions:darwin_arm64": "@openssl_macos_arm64//:openssl_lib",
+        "@bazel_tools//src/conditions:darwin_x86_64": "@openssl_macos_x86_64//:openssl_lib",
+        "@bazel_tools//src/conditions:linux_aarch64": "@openssl_linux_aarch64//:openssl_lib",
+        "@bazel_tools//src/conditions:linux_x86_64": "@openssl_linux_x86_64//:openssl_lib",
+    }),
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "openssl_include",
+    actual = select({
+        "@bazel_tools//src/conditions:darwin_arm64": "@openssl_macos_arm64//:openssl_include",
+        "@bazel_tools//src/conditions:darwin_x86_64": "@openssl_macos_x86_64//:openssl_include",
+        "@bazel_tools//src/conditions:linux_aarch64": "@openssl_linux_aarch64//:openssl_include",
+        "@bazel_tools//src/conditions:linux_x86_64": "@openssl_linux_x86_64//:openssl_include",
+    }),
+    visibility = ["//visibility:public"],
+)

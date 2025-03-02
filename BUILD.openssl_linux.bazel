@@ -1,0 +1,52 @@
+load("@aspect_bazel_lib//lib:copy_file.bzl", "copy_file")
+load("@aspect_bazel_lib//lib:copy_to_directory.bzl", "copy_to_directory")
+load("@bazel_skylib//rules:select_file.bzl", "select_file")
+load("@rules_cc//cc:defs.bzl", "cc_import", "cc_library")
+
+cc_import(
+    name = "libssl",
+    hdrs = glob(["usr/include/openssl/*.h"]),
+    shared_library = "usr/lib64/libssl.so.1.1",
+    visibility = ["//visibility:public"],
+    deps = [":libcrypto"],
+)
+
+cc_import(
+    name = "libcrypto",
+    hdrs = glob(["usr/include/openssl/*.h"]),
+    shared_library = "usr/lib64/libcrypto.so.1.1",
+)
+
+# The following are to support the building of rust crate openssl-sys
+# See here for the original inspiration:
+# https://github.com/MaterializeInc/materialize/blob/main/misc/bazel/c_deps/BUILD.openssl.bazel#L121-L172
+
+copy_file(
+    name = "libssl_copy",
+    src = "usr/lib64/libssl.so.1.1",
+    out = "libssl.so",
+    allow_symlink = False,
+)
+
+copy_file(
+    name = "libcrypto_copy",
+    src = "usr/lib64/libcrypto.so.1.1",
+    out = "libcrypto.so",
+    allow_symlink = False,
+)
+
+copy_to_directory(
+    name = "openssl_lib",
+    srcs = [
+        ":libcrypto_copy",
+        ":libssl_copy",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+copy_to_directory(
+    name = "openssl_include",
+    srcs = glob(["usr/include/openssl/*.h"]),
+    replace_prefixes = {"usr/include/": ""},
+    visibility = ["//visibility:public"],
+)

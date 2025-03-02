@@ -1,0 +1,8 @@
+module(name = "openssl")
+
+bazel_dep(name = "rules_cc", version = "0.0.9")
+bazel_dep(name = "aspect_bazel_lib", version = "2.10.0")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+
+non_module_dependencies = use_extension("//:deps.bzl", "non_module_dependencies")
+use_repo(non_module_dependencies, "openssl_linux_aarch64", "openssl_linux_x86_64", "openssl_macos_arm64", "openssl_macos_x86_64")
