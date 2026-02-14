@@ -24,9 +24,19 @@ cc_import(
     static_library = "lib/libcrypto.a",
 )
 
+alias(
+    name = "libcrypto",
+    actual = ":_libcrypto_import",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "crypto",
+    actual = ":libcrypto",
+    visibility = ["//visibility:public"],
+)
+
 # The following are to support the building of rust crate openssl-sys
-# See here for the original inspiration:
-# https://github.com/MaterializeInc/materialize/blob/main/misc/bazel/c_deps/BUILD.openssl.bazel#L121-L172
 
 copy_file(
     name = "libssl_copy",

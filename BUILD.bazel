@@ -30,3 +30,20 @@ alias(
     }),
     visibility = ["//visibility:public"],
 )
+
+alias(
+    name = "ssl",
+    actual = ":openssl",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "crypto",
+    actual = select({
+        "@bazel_tools//src/conditions:darwin_arm64": "@openssl_macos_arm64//:crypto",
+        "@bazel_tools//src/conditions:darwin_x86_64": "@openssl_macos_x86_64//:crypto",
+        "@bazel_tools//src/conditions:linux_aarch64": "@openssl_linux_aarch64//:crypto",
+        "@bazel_tools//src/conditions:linux_x86_64": "@openssl_linux_x86_64//:crypto",
+    }),
+    visibility = ["//visibility:public"],
+)
